@@ -1,0 +1,75 @@
+RestaurantBooking APP Steps:
+
+- Create Preject Structure
+
+- CREATE AZURE SQL SERVER AND DATABASE
+  ------------------------------------
+  
+- Add your local ip to the firewall
+	 - your DB -> set server firewall - add local ip in the firewall rules section
+     - After that, turn on "Allow Azure Services and resources" in able to access this server to "Yes".
+
+- Then save all your changes.
+- Connect locally to azure sql server using sql management tool
+
+- Configure nuget packages for EF migration in Data project
+	- Microsoft.EntityFramework.Core
+	- Microsoft.EntityFramework.Core.Design 
+	- Microsoft.EntityFrameworkCore.SqlServer
+	- Microsoft.Extensions.Hosting.Abstractions
+	
+- Configure nuget packages for EF migration in Core project
+	- Microsoft.EntityFrameworkCore.Tools
+
+- Now Configure connectionstring in appsettings.json
+- Create DBContext class in Data project
+- Add Data,Core and Service project references to API project and configure dbcontext in program.cs
+
+- Create models in Core project 
+- Run add-migration in Data project as DbContext class exists in this project
+- Implement Restaurant Repository class in Data
+- Implement Restaurant Service class in Service Project
+- Add Restaurant Controller in API project and implement API endpoints
+
+- CREATE AZURE WEB APP -> App Service
+  -----------------------------------
+
+- Publish your API project to the azure app service
+- try accessing the API swagger endpoint after publish is completed
+	=> https://rr-restaurant-booking-app-api.azurewebsites.net/swagger/index.html
+	- It will not work as we need to set connection string in azure app service
+
+- Go to your Web App -> Configuaration -> In Connection Strings section add a new connection string
+									-> Provide the Same connection name as there in your appsettings.json as code will be looking for this variable name
+									-> Provide connection string
+									-> Change to SQL Server
+									-> Save and now you'll be able to test it.
+
+- Go to your web app -> monitoring -> log stream -> logs are disabled (This is very important for debugging the issue, otherwise will not get to know what is happening in the background)
+
+- LETS ENABLE LOGS IN WEB APP (APPLICATION INSIGHTS and SERILOG)
+  ---------------------------
+- Go to your web app -> Settings -> Application Insights -> Enable it
+					 -> Go to .Net Core -> and enable all(Recommended, Interop, Profiler, Snapshot..)
+					 -> Apply
+					 -> Go to top -> Click View Application Insights Data -> Copy connection string
+					 
+- Back to VS -> Install below nuget packages in API project 
+
+					- Microsoft.ApplicationInsights.AspNetCore
+					- Microsoft.Extensions.Logging.AzureAppServices
+					- Serilog.Sinks.ApplicationInsights
+					- Serilog.AspNetCore
+									
+
+  
+
+	
+RestaurantBooking APP
+
+- Azure DB User : rr, PWD - TublaArohe@2019
+- Server=tcp:rr-restaurant-booking.database.windows.net,1433;Initial Catalog=RestaurantBookingDB;Persist Security Info=False;User ID=rr;Password=TublaArohe@2019;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;
+
+Application Insights
+
+- InstrumentationKey=a0019536-1125-4fea-a325-eaf3a48e7cb2;IngestionEndpoint=https://eastus-8.in.applicationinsights.azure.com/;LiveEndpoint=https://eastus.livediagnostics.monitor.azure.com/
