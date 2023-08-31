@@ -1,18 +1,25 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>net7.0</TargetFramework>
-    <Nullable>enable</Nullable>
-    <ImplicitUsings>enable</ImplicitUsings>
+	<TargetFramework>net7.0</TargetFramework>
+	<Nullable>enable</Nullable>
+	<ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.5" />
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
+	<PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="7.0.5" />
+	<PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
+	<Folder Include="Controllers\" />
+  </ItemGroup>
+
+  <ItemGroup>
+	<ProjectReference Include="..\RestaurantBookingApp.Core\RestaurantBookingApp.Core.csproj" />
+	<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.10" />
+	<ProjectReference Include="..\RestaurantBookingApp.Data\RestaurantBookingApp.Data.csproj" />
+	<ProjectReference Include="..\RestaurantBookingApp.Service\RestaurantBookingApp.Service.csproj" />
   </ItemGroup>
 
 </Project>
