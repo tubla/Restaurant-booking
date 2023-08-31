@@ -6,7 +6,7 @@ namespace RestaurantBookingApp.Core
     {
         public int Id { get; set; }
 
-        public int RestaurantId { get; set; }
+        public int RestaurantBranchId { get; set; }
 
         [MaxLength(100)]
         public string? TableName { get; set; }
