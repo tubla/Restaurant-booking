@@ -13,7 +13,7 @@ namespace RestaurantBookingApp.Data.Migrations
 {
     [DbContext(typeof(RestaurantBookingDBContext))]
     [Migration("20230831053158_updated foreign key field name")]
-    partial class updatedforeignkeyfieldname
+    partial class Updatedforeignkeyfieldname
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)

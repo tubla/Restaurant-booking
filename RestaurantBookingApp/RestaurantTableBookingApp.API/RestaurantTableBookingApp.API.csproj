@@ -12,10 +12,6 @@
   </ItemGroup>
 
   <ItemGroup>
-	<Folder Include="Controllers\" />
-  </ItemGroup>
-
-  <ItemGroup>
 	<ProjectReference Include="..\RestaurantBookingApp.Core\RestaurantBookingApp.Core.csproj" />
 	<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.10" />
 	<ProjectReference Include="..\RestaurantBookingApp.Data\RestaurantBookingApp.Data.csproj" />

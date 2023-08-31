@@ -5,7 +5,7 @@
 namespace RestaurantBookingApp.Data.Migrations
 {
     /// <inheritdoc />
-    public partial class updatedforeignkeyfieldname : Migration
+    public partial class Updatedforeignkeyfieldname : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

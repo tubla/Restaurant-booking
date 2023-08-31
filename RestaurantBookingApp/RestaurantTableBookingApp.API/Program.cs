@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using RestaurantBookingApp.Data;
+using RestaurantBookingApp.Service;
 
 internal class Program
 {
@@ -14,6 +15,14 @@ internal class Program
             options.UseSqlServer(builder.Configuration.GetConnectionString("AzureDBConnectionString") ?? "")
             .EnableSensitiveDataLogging(); // should not be used in production
         });
+
+        builder.Services.AddScoped<IRestaurantRepository, RestaurantRepository>(); // DI Configuration, one instance per http request, that means, if we need the instance in several places like in conroller then services, same instance copy would be shared in that request.
+        builder.Services.AddScoped<IRestaurantService, RestaurantService>(); // DI Configuration, one instance per http request, that means, if we need the instance in several places like in conroller then services, same instance copy would be shared in that request.
+
+        /*
+        builder.Services.AddTransient<IRestaurantRepository, RestaurantRepository>(); // DI Configuration, every single time you inject/ask for instance, a new instance is given.
+        builder.Services.AddSingleton<IRestaurantRepository, RestaurantRepository>(); // DI Configuration, for the whole app only one instance would be created. It is danger to use as it is not thread safe.
+        */
 
         builder.Services.AddControllers();
         // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
