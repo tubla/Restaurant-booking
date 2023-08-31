@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestaurantBookingApp.Data",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestaurantBookingApp.Service", "RestaurantBookingApp.Service\RestaurantBookingApp.Service.csproj", "{DA03C83C-9BEE-4842-A59A-8748B01518AA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestaurantBookingApp.Function", "RestaurantBookingApp.Function\RestaurantBookingApp.Function.csproj", "{7F0E0A6F-8A92-4547-9929-3D206E273F13}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,6 +35,10 @@ Global
 		{DA03C83C-9BEE-4842-A59A-8748B01518AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{DA03C83C-9BEE-4842-A59A-8748B01518AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DA03C83C-9BEE-4842-A59A-8748B01518AA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7F0E0A6F-8A92-4547-9929-3D206E273F13}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7F0E0A6F-8A92-4547-9929-3D206E273F13}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7F0E0A6F-8A92-4547-9929-3D206E273F13}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7F0E0A6F-8A92-4547-9929-3D206E273F13}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
