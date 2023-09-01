@@ -31,9 +31,11 @@ internal class Program
 
             // Add services to the container.
 
-            builder.Services.AddDbContext<RestaurantBookingDBContext>(options =>
+            builder.Services.AddDbContext<RestaurantBookingDBContext>(async options =>
             {
-                options.UseSqlServer(builder.Configuration.GetConnectionString("AzureDBConnectionString") ?? "")
+                var connectionString = builder.Configuration.GetConnectionString("AzureDBConnectionString"); // In production this will not be null, but in Development it will be null
+                connectionString = string.IsNullOrEmpty(connectionString) ? await KeyVaultSecretReader.GetConnectionString(builder.Configuration) : connectionString;
+                options.UseSqlServer(connectionString)
                 .EnableSensitiveDataLogging(); // should not be used in production
             });
 

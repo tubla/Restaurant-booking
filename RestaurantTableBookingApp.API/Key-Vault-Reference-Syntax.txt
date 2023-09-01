@@ -1,0 +1,17 @@
+﻿
+---syntax #1
+---------Specific Version
+@Microsoft.KeyVault(SecretUri=https://rr-restaurant-keyvault.vault.azure.net/secrets/RestaurantDbContext/23b56532dd9548f4aaffdf0b2f8b40b3)
+
+
+---------Latest Version
+@Microsoft.KeyVault(SecretUri=https://rr-restaurant-keyvault.vault.azure.net/secrets/RestaurantDbContext)
+
+
+---syntax #2
+---------Specific Version
+@Microsoft.KeyVault(VaultName=rr-restaurant-keyvault;SecretName=RestaurantDbContext;SecretVersion=23b56532dd9548f4aaffdf0b2f8b40b3)
+
+
+---------Latest Version
+@Microsoft.KeyVault(VaultName=rr-restaurant-keyvault;SecretName=RestaurantDbContext)
