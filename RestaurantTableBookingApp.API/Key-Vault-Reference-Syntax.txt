@@ -15,3 +15,9 @@
 
 ---------Latest Version
 @Microsoft.KeyVault(VaultName=rr-restaurant-keyvault;SecretName=RestaurantDbContext)
+
+
+
+
+-------------Storage Account Connection
+@Microsoft.KeyVault(SecretUri=https://rr-restaurant-keyvault.vault.azure.net/secrets/RestaurantStorage/aed2169236614a2387e0895b498cbba0)

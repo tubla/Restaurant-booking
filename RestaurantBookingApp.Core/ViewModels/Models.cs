@@ -31,4 +31,10 @@
         public string MealType { get; set; } = null!;
         public string TableStatus { get; set; } = null!;
     }
+
+    public class BlobDownloadModel
+    {
+        public string? Name { get; set; }
+        public string DownloadLink { get; set; } = null!;
+    }
 }

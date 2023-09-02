@@ -16,5 +16,6 @@ namespace RestaurantBookingApp.Data
         public DbSet<TimeSlot> TimeSlots { get; set; }
         public DbSet<Reservation> Reservations { get; set; }
         public DbSet<User> Users { get; set; }
+        public DbSet<CustomerContactUploads> CustomerContactUploads { get; set; }
     }
 }
