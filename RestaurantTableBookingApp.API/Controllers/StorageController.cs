@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using RestaurantBookingApp.Core.ViewModels;
 using RestaurantBookingApp.Service;
 
 namespace RestaurantTableBookingApp.API.Controllers
@@ -18,6 +19,8 @@ namespace RestaurantTableBookingApp.API.Controllers
         }
 
         [HttpPost("upload")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> UploadFile(IFormFile file)
         {
             var azureStorageConnectionString = KeyVaultSecretReader.GetConnectionString(_configuration, "StorageKeyVault");
@@ -26,6 +29,7 @@ namespace RestaurantTableBookingApp.API.Controllers
         }
 
         [HttpGet("download")]
+        [ProducesResponseType(typeof(List<BlobDownloadModel>), StatusCodes.Status200OK)]
         public async Task<IActionResult> DownloadBlobs(string azureStorageContainerName = "rr-restaurant-storage-protected")
         {
             var azureStorageConnectionString = KeyVaultSecretReader.GetConnectionString(_configuration, "StorageKeyVault");

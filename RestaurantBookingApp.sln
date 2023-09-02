@@ -3,15 +3,15 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.6.33723.286
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestaurantTableBookingApp.API", "RestaurantTableBookingApp.API\RestaurantTableBookingApp.API.csproj", "{40137055-8EED-4361-AA99-4B8FA9020C47}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RestaurantTableBookingApp.API", "RestaurantTableBookingApp.API\RestaurantTableBookingApp.API.csproj", "{40137055-8EED-4361-AA99-4B8FA9020C47}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestaurantBookingApp.Core", "RestaurantBookingApp.Core\RestaurantBookingApp.Core.csproj", "{26B1E043-187D-4699-9C21-4EA1253C6F44}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RestaurantBookingApp.Core", "RestaurantBookingApp.Core\RestaurantBookingApp.Core.csproj", "{26B1E043-187D-4699-9C21-4EA1253C6F44}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestaurantBookingApp.Data", "RestaurantBookingApp.Data\RestaurantBookingApp.Data.csproj", "{18165325-D2AF-4E5E-9E34-35D8FAA1133A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RestaurantBookingApp.Data", "RestaurantBookingApp.Data\RestaurantBookingApp.Data.csproj", "{18165325-D2AF-4E5E-9E34-35D8FAA1133A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestaurantBookingApp.Service", "RestaurantBookingApp.Service\RestaurantBookingApp.Service.csproj", "{DA03C83C-9BEE-4842-A59A-8748B01518AA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RestaurantBookingApp.Service", "RestaurantBookingApp.Service\RestaurantBookingApp.Service.csproj", "{DA03C83C-9BEE-4842-A59A-8748B01518AA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RestaurantBookingApp.Function", "RestaurantBookingApp.Function\RestaurantBookingApp.Function.csproj", "{7F0E0A6F-8A92-4547-9929-3D206E273F13}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RestaurantBookingApp.Function", "RestaurantBookingApp.Function\RestaurantBookingApp.Function.csproj", "{7F0E0A6F-8A92-4547-9929-3D206E273F13}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
