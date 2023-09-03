@@ -2,7 +2,6 @@
 using Newtonsoft.Json;
 using RestaurantBookingApp.Core.ViewModels;
 using RestaurantBookingApp.Service;
-using StackExchange.Redis;
 
 namespace RestaurantTableBookingApp.API.Controllers
 {
@@ -11,20 +10,14 @@ namespace RestaurantTableBookingApp.API.Controllers
     public class RestaurantController : ControllerBase
     {
         private readonly IRestaurantService _restaurantService;
-        private readonly IDatabase _cache;
+        private readonly IRedisCacheService _redisCacheService;
 
-        public RestaurantController(IRestaurantService restaurantService, IConfiguration configuration)
+        //private readonly IDatabase _cache;
+
+        public RestaurantController(IRestaurantService restaurantService, IConfiguration configuration, IRedisCacheService redisCacheService)
         {
             _restaurantService = restaurantService;
-
-            var lazyConnection = new Lazy<ConnectionMultiplexer>(() =>
-            {
-                var redisCacheConnectionString = KeyVaultSecretReader.GetConnectionString(configuration, "RedisCacheConnectionString");
-                var cacheConnectionString = configuration.GetConnectionString(redisCacheConnectionString);
-                return ConnectionMultiplexer.Connect(cacheConnectionString!);
-            });
-
-            _cache = lazyConnection.Value.GetDatabase();
+            _redisCacheService = redisCacheService;
         }
 
         [HttpGet("restaurants")]
@@ -44,24 +37,15 @@ namespace RestaurantTableBookingApp.API.Controllers
 
             IEnumerable<RestaurantModel> restaurantModels = new List<RestaurantModel>();
             var keyName = "getAllRestaurent";
-            var cachedData = _cache.StringGet(keyName);
-            if (cachedData.HasValue)
-            {
-                restaurantModels = JsonConvert.DeserializeObject<List<RestaurantModel>>(cachedData.ToString());
-            }
-            else
+            restaurantModels = _redisCacheService.GetDeserializedData<IEnumerable<RestaurantModel>>("getAllRestaurent")!;
+            if (restaurantModels == default(IEnumerable<RestaurantModel>))
             {
                 restaurantModels = await _restaurantService.GetAllRestaurantAsync();
                 if (restaurantModels == null || !restaurantModels.Any())
                 {
                     return NotFound(); // this returns 404 http status code
                 }
-
-                if (!cachedData.HasValue)
-                {
-                    _cache.StringSet(keyName, JsonConvert.SerializeObject(restaurantModels));
-                }
-
+                _redisCacheService.CacheData(keyName, JsonConvert.SerializeObject(restaurantModels));
             }
             return Ok(restaurantModels);
         }
@@ -74,12 +58,8 @@ namespace RestaurantTableBookingApp.API.Controllers
         {
             IEnumerable<RestaurantBranchModel> restaurantBranchModels = new List<RestaurantBranchModel>();
             var keyName = $"getBranchesByRestaurantId-{restaurantId}";
-            var cachedData = _cache.StringGet(keyName);
-            if (cachedData.HasValue)
-            {
-                restaurantBranchModels = JsonConvert.DeserializeObject<IEnumerable<RestaurantBranchModel>>(cachedData.ToString());
-            }
-            else
+            restaurantBranchModels = _redisCacheService.GetDeserializedData<IEnumerable<RestaurantBranchModel>>(keyName)!;
+            if (restaurantBranchModels == default(IEnumerable<RestaurantBranchModel>))
             {
                 restaurantBranchModels = await _restaurantService.GetAllRestaurantBranchesByRestaurantIdAsync(restaurantId);
                 if (restaurantBranchModels == null || !restaurantBranchModels.Any())
@@ -87,10 +67,7 @@ namespace RestaurantTableBookingApp.API.Controllers
                     return NotFound(); // this returns 404 http status code
                 }
 
-                if (!cachedData.HasValue)
-                {
-                    _cache.StringSet(keyName, JsonConvert.SerializeObject(restaurantBranchModels));
-                }
+                _redisCacheService.CacheData(keyName, JsonConvert.SerializeObject(restaurantBranchModels));
             }
             return Ok(restaurantBranchModels);
         }

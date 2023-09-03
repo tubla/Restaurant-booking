@@ -31,25 +31,37 @@ internal class Program
 
             // Add services to the container.
 
+            builder.Services.AddScoped<IRestaurantRepository, RestaurantRepository>(); // DI Configuration, one instance per http request, that means, if we need the instance in several places like in conroller then services, same instance copy would be shared in that request.
+            builder.Services.AddScoped<IRestaurantService, RestaurantService>(); // DI Configuration, one instance per http request, that means, if we need the instance in several places like in conroller then services, same instance copy would be shared in that request.
+            builder.Services.AddScoped<IStorageRepository, StorageRepository>();
+            builder.Services.AddScoped<IStorageService, StorageService>();
+            builder.Services.AddScoped<IRedisCacheService, RedisCacheService>();
+
+            /*
+            builder.Services.AddTransient<IRestaurantRepository, RestaurantRepository>(); // DI Configuration, every single time you inject/ask for instance, a new instance is given.
+            builder.Services.AddSingleton<IRestaurantRepository, RestaurantRepository>(); // DI Configuration, for the whole app only one instance would be created. It is danger to use as it is not thread safe.
+            */
+
             builder.Services.AddDbContext<RestaurantBookingDBContext>(options =>
             {
+                var serviceProvider = builder.Services.BuildServiceProvider();
+                var cacheService = serviceProvider.GetRequiredService<IRedisCacheService>();
+                string key = "DbConnectionString";
+                string? dbConnectionString = cacheService.GetData(key);
+                if (string.IsNullOrEmpty(dbConnectionString))
+                {
+                    dbConnectionString = KeyVaultSecretReader.GetConnectionString(builder.Configuration, "DbKeyVault");
+                    cacheService.CacheData(key, dbConnectionString);
+                }
                 var connectionString = builder.Configuration.GetConnectionString("AzureDBConnectionString"); // In production this will not be null, but in Development it will be null
-                connectionString = string.IsNullOrEmpty(connectionString) ? KeyVaultSecretReader.GetConnectionString(builder.Configuration, "DbKeyVault") : connectionString;
+                connectionString = string.IsNullOrEmpty(connectionString) ? dbConnectionString : connectionString;
                 options.UseSqlServer(connectionString)
                 .EnableSensitiveDataLogging(); // should not be used in production
             });
 
             Log.Information("Starting the application....");
 
-            builder.Services.AddScoped<IRestaurantRepository, RestaurantRepository>(); // DI Configuration, one instance per http request, that means, if we need the instance in several places like in conroller then services, same instance copy would be shared in that request.
-            builder.Services.AddScoped<IRestaurantService, RestaurantService>(); // DI Configuration, one instance per http request, that means, if we need the instance in several places like in conroller then services, same instance copy would be shared in that request.
-            builder.Services.AddScoped<IStorageRepository, StorageRepository>();
-            builder.Services.AddScoped<IStorageService, StorageService>();
 
-            /*
-            builder.Services.AddTransient<IRestaurantRepository, RestaurantRepository>(); // DI Configuration, every single time you inject/ask for instance, a new instance is given.
-            builder.Services.AddSingleton<IRestaurantRepository, RestaurantRepository>(); // DI Configuration, for the whole app only one instance would be created. It is danger to use as it is not thread safe.
-            */
 
 
 
