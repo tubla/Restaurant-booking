@@ -1,4 +1,6 @@
 ﻿
+We need to put this connection in wep-app -> configuration -> connection string section(see the saved photo section) 
+
 ---syntax #1
 ---------Specific Version
 @Microsoft.KeyVault(SecretUri=https://rr-restaurant-keyvault.vault.azure.net/secrets/RestaurantDbContext/23b56532dd9548f4aaffdf0b2f8b40b3)
@@ -21,3 +23,7 @@
 
 -------------Storage Account Connection
 @Microsoft.KeyVault(SecretUri=https://rr-restaurant-keyvault.vault.azure.net/secrets/RestaurantStorage/aed2169236614a2387e0895b498cbba0)
+
+
+-------------Redis Cache Connection
+@Microsoft.KeyVault(SecretUri=https://rr-restaurant-keyvault.vault.azure.net/secrets/RedisCacheDbConnection/36e16077024044c49d09d0e6b41fed18)

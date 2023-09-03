@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using RestaurantBookingApp.Core.ViewModels;
 using RestaurantBookingApp.Service;
+using StackExchange.Redis;
 
 namespace RestaurantTableBookingApp.API.Controllers
 {
@@ -9,17 +11,59 @@ namespace RestaurantTableBookingApp.API.Controllers
     public class RestaurantController : ControllerBase
     {
         private readonly IRestaurantService _restaurantService;
+        private readonly IDatabase _cache;
 
-        public RestaurantController(IRestaurantService restaurantService)
+        public RestaurantController(IRestaurantService restaurantService, IConfiguration configuration)
         {
             _restaurantService = restaurantService;
+
+            var lazyConnection = new Lazy<ConnectionMultiplexer>(() =>
+            {
+                var redisCacheConnectionString = KeyVaultSecretReader.GetConnectionString(configuration, "RedisCacheConnectionString");
+                var cacheConnectionString = configuration.GetConnectionString(redisCacheConnectionString);
+                return ConnectionMultiplexer.Connect(cacheConnectionString!);
+            });
+
+            _cache = lazyConnection.Value.GetDatabase();
         }
 
         [HttpGet("restaurants")]
         [ProducesResponseType(200, Type = typeof(List<RestaurantModel>))]
         public async Task<ActionResult> GetAllRestaurantAsync()
         {
-            return Ok(await _restaurantService.GetAllRestaurantAsync());
+            //NOTE : For put/delete simple delete the key from cache, next time during get query cache will be refilled.
+            /*
+                    var keyName = $"restaurantUpdate-{restaurantId}";
+                    var cachedData = cache.StringGet(keyName);
+                    if(cachedData.HasValue)
+                    {
+                        await _cache.KeyDeleteAsync(keyName);
+                    }             
+             */
+
+
+            IEnumerable<RestaurantModel> restaurantModels = new List<RestaurantModel>();
+            var keyName = "getAllRestaurent";
+            var cachedData = _cache.StringGet(keyName);
+            if (cachedData.HasValue)
+            {
+                restaurantModels = JsonConvert.DeserializeObject<List<RestaurantModel>>(cachedData.ToString());
+            }
+            else
+            {
+                restaurantModels = await _restaurantService.GetAllRestaurantAsync();
+                if (restaurantModels == null || !restaurantModels.Any())
+                {
+                    return NotFound(); // this returns 404 http status code
+                }
+
+                if (!cachedData.HasValue)
+                {
+                    _cache.StringSet(keyName, JsonConvert.SerializeObject(restaurantModels));
+                }
+
+            }
+            return Ok(restaurantModels);
         }
 
 
@@ -28,12 +72,27 @@ namespace RestaurantTableBookingApp.API.Controllers
         [ProducesResponseType(404)]
         public async Task<ActionResult<IEnumerable<RestaurantBranchModel>>> GetRestaurantBrancesByRestaurantIdAsync(int restaurantId)
         {
-            var brances = await _restaurantService.GetAllRestaurantBranchesByRestaurantIdAsync(restaurantId);
-            if (brances == null || !brances.Any())
+            IEnumerable<RestaurantBranchModel> restaurantBranchModels = new List<RestaurantBranchModel>();
+            var keyName = $"getBranchesByRestaurantId-{restaurantId}";
+            var cachedData = _cache.StringGet(keyName);
+            if (cachedData.HasValue)
             {
-                return NotFound(); // this returns 404 http status code
+                restaurantBranchModels = JsonConvert.DeserializeObject<IEnumerable<RestaurantBranchModel>>(cachedData.ToString());
             }
-            return Ok(brances);
+            else
+            {
+                restaurantBranchModels = await _restaurantService.GetAllRestaurantBranchesByRestaurantIdAsync(restaurantId);
+                if (restaurantBranchModels == null || !restaurantBranchModels.Any())
+                {
+                    return NotFound(); // this returns 404 http status code
+                }
+
+                if (!cachedData.HasValue)
+                {
+                    _cache.StringSet(keyName, JsonConvert.SerializeObject(restaurantBranchModels));
+                }
+            }
+            return Ok(restaurantBranchModels);
         }
 
         [HttpGet("diningtables/{branchId}")]
