@@ -4,6 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using RestaurantBookingApp.Data;
 using RestaurantBookingApp.Service;
 using RestaurantTableBookingApp.API;
+using RestaurantTableBookingApp.API.RateLimiting;
 using Serilog;
 using System.Net;
 
@@ -59,6 +60,27 @@ internal class Program
                 .EnableSensitiveDataLogging(); // should not be used in production
             });
 
+            // Rate limiting - is restricting the consumer from accessing the API based on the number of request.
+            // 3 reasons to implement this            
+            //    1.    Improves security - we can limit, how many times the endpoint can be called. This way we can prevent the bruteforce and Denial-of-service (DoS)
+            //    2.    Saves money
+            //    3.    Allows implementing paid APIs
+
+            /* 
+             *  .net core 7 provides rate limiting out of the box, but will implement Rate limiting considering the framework below .net 7 
+             * 
+            builder.Services.AddRateLimiter(rateLimiterOptions =>
+            {
+                rateLimiterOptions.AddFixedWindowLimiter("fixed", options =>
+                {
+                    options.PermitLimit = 1;
+                    options.Window = TimeSpan.FromSeconds(5);
+                    options.QueueLimit = 0;
+                    options.QueueProcessingOrder = System.Threading.RateLimiting.QueueProcessingOrder.OldestFirst;
+                });
+            });
+            */
+
             Log.Information("Starting the application....");
 
 
@@ -87,6 +109,7 @@ internal class Program
                 });
             });
 
+            app.UseMiddleware<RateLimitingMiddlware>();
             app.UseMiddleware<RequestResponseLoggingMiddleware>();
 
 
@@ -101,6 +124,8 @@ internal class Program
             app.UseHttpsRedirection();
 
             app.UseAuthorization();
+
+            // app.UseRateLimiter();
 
             app.MapControllers();
 

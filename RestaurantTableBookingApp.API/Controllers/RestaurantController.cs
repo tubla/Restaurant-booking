@@ -2,6 +2,7 @@
 using Newtonsoft.Json;
 using RestaurantBookingApp.Core.ViewModels;
 using RestaurantBookingApp.Service;
+using RestaurantTableBookingApp.API.RateLimiting;
 
 namespace RestaurantTableBookingApp.API.Controllers
 {
@@ -22,6 +23,7 @@ namespace RestaurantTableBookingApp.API.Controllers
 
         [HttpGet("restaurants")]
         [ProducesResponseType(200, Type = typeof(List<RestaurantModel>))]
+        [LimitRequests(MaxRequests = 2, TimeWindow = 5)]
         public async Task<ActionResult> GetAllRestaurantAsync()
         {
             //NOTE : For put/delete simple delete the key from cache, next time during get query cache will be refilled.

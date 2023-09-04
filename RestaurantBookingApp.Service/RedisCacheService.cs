@@ -26,7 +26,7 @@ namespace RestaurantBookingApp.Service
         public void CacheData(string key, string value)
         {
             var cachedData = _cache?.StringGet(key);
-            if (cachedData.HasValue)
+            if (cachedData.HasValue && !string.IsNullOrEmpty(cachedData.Value))
             {
                 return;
             }
