@@ -22,9 +22,9 @@ namespace RestaurantTableBookingApp.API.Controllers
         }
 
         [HttpGet("restaurants")]
-        [ProducesResponseType(200, Type = typeof(List<RestaurantModel>))]
+        [ProducesResponseType(200, Type = typeof(PagedResponse<RestaurantModel>))]
         [LimitRequests(MaxRequests = 2, TimeWindow = 5)]
-        public async Task<ActionResult> GetAllRestaurantAsync()
+        public async Task<ActionResult<PagedResponse<RestaurantModel>>> GetAllRestaurantAsync([FromQuery] PagingParameters pagingParameters) // GET method cannot have body, therefore we need to specify [FromQuery] attribute
         {
             //NOTE : For put/delete simple delete the key from cache, next time during get query cache will be refilled.
             /*
@@ -40,16 +40,28 @@ namespace RestaurantTableBookingApp.API.Controllers
             IEnumerable<RestaurantModel> restaurantModels = new List<RestaurantModel>();
             var keyName = "getAllRestaurent";
             restaurantModels = _redisCacheService.GetDeserializedData<IEnumerable<RestaurantModel>>("getAllRestaurent")!;
+            PagedResponse<RestaurantModel> pagedResponse;
             if (restaurantModels == default(IEnumerable<RestaurantModel>))
             {
-                restaurantModels = await _restaurantService.GetAllRestaurantAsync();
+                pagedResponse = await _restaurantService.GetAllRestaurantAsync(pagingParameters);
+                restaurantModels = pagedResponse.Data;
                 if (restaurantModels == null || !restaurantModels.Any())
                 {
                     return NotFound(); // this returns 404 http status code
                 }
                 _redisCacheService.CacheData(keyName, JsonConvert.SerializeObject(restaurantModels));
             }
-            return Ok(restaurantModels);
+            else
+            {
+                pagedResponse = PagingFilter<RestaurantModel>.ToPagedResponse(restaurantModels.AsQueryable(), pagingParameters.PageNumber, pagingParameters.PageSize);
+            }
+
+
+
+            // We can add the data to headers as well
+            Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(pagedResponse));
+
+            return Ok(pagedResponse);
         }
 
 

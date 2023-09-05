@@ -4,7 +4,8 @@ namespace RestaurantBookingApp.Data
 {
     public interface IRestaurantRepository
     {
-        Task<IEnumerable<RestaurantModel>> GetAllRestaurantAsync();
+        Task<PagedResponse<RestaurantModel>> GetAllRestaurantAsync(PagingParameters pagingParameters);
+
 
         /// <summary>
         /// 

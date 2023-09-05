@@ -11,9 +11,9 @@ namespace RestaurantBookingApp.Service
         {
             _restaurantRepository = restaurantRepository;
         }
-        public async Task<IEnumerable<RestaurantModel>> GetAllRestaurantAsync()
+        public async Task<PagedResponse<RestaurantModel>> GetAllRestaurantAsync(PagingParameters pagingParameters)
         {
-            return await _restaurantRepository.GetAllRestaurantAsync();
+            return await _restaurantRepository.GetAllRestaurantAsync(pagingParameters);
         }
 
         public async Task<IEnumerable<RestaurantBranchModel>> GetAllRestaurantBranchesByRestaurantIdAsync(int restaurantId)

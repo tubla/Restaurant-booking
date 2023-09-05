@@ -11,9 +11,9 @@ namespace RestaurantBookingApp.Data
         {
             _dbContext = dbContext;
         }
-        public async Task<IEnumerable<RestaurantModel>> GetAllRestaurantAsync()
+        public async Task<PagedResponse<RestaurantModel>> GetAllRestaurantAsync(PagingParameters pagingParameters)
         {
-            return await _dbContext.Restaurants
+            var data = await _dbContext.Restaurants
                         .OrderByDescending(r => r.Name)
                         .Select(r => new RestaurantModel
                         {
@@ -24,6 +24,7 @@ namespace RestaurantBookingApp.Data
                             Phone = r.Phone,
                             ImageUrl = r.ImageUrl
                         }).ToListAsync();
+            return PagingFilter<RestaurantModel>.ToPagedResponse(data.AsQueryable(), pagingParameters.PageNumber, pagingParameters.PageSize);
         }
 
         public async Task<IEnumerable<RestaurantBranchModel>> GetAllRestaurantBranchesByRestaurantIdAsync(int restaurantId)

@@ -4,7 +4,7 @@ namespace RestaurantBookingApp.Service
 {
     public interface IRestaurantService
     {
-        Task<IEnumerable<RestaurantModel>> GetAllRestaurantAsync();
+        Task<PagedResponse<RestaurantModel>> GetAllRestaurantAsync(PagingParameters pagingParameters);
 
         Task<IEnumerable<RestaurantBranchModel>> GetAllRestaurantBranchesByRestaurantIdAsync(int restaurantId);
         Task<IEnumerable<DiningTableWithTimeSlotstModel>> GetDiningTablesByBranchAsync(int branchId, DateTime date);

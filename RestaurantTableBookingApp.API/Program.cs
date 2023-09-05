@@ -60,7 +60,7 @@ internal class Program
                 .EnableSensitiveDataLogging(); // should not be used in production
             });
 
-            // Rate limiting - is restricting the consumer from accessing the API based on the number of request.
+            // Rate limiting/Throttling - is restricting the consumer from accessing the API based on the number of request.
             // 3 reasons to implement this            
             //    1.    Improves security - we can limit, how many times the endpoint can be called. This way we can prevent the bruteforce and Denial-of-service (DoS)
             //    2.    Saves money
