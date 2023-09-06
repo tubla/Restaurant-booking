@@ -32,7 +32,9 @@ namespace RestaurantBookingApp.Function
                     .AddEnvironmentVariables()
                     .Build();
 
-                string connectionString = config.GetConnectionString("AzureDBConnectionString");
+                //string connectionString = config.GetConnectionString("AzureDBConnectionString");
+
+                string connectionString = Environment.GetEnvironmentVariable("SQLAZURECONNSTR_AzureDBConnectionString");
 
                 using (SqlConnection connection = new SqlConnection(connectionString))
                 {

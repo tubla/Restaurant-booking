@@ -7,7 +7,7 @@
   },
 
   "ConnectionStrings": {
-    "AzureDBConnectionString": "Server=tcp:rr-restaurant-booking.database.windows.net,1433;Initial Catalog=RestaurantBookingDB;Persist Security Info=False;User ID=rr;Password=TublaArohe@2019;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;",
-    "AzureStorageConnectionString": "DefaultEndpointsProtocol=https;AccountName=rrrestaurantstorage;AccountKey=MyB9yiJM0lLrG8HeyOi9RomyXAUSStowzJuuZ1GfQz1r9vRx3WkYJ6yyHkTpTC2P+NA3ljf/l8z4+ASt5wX9lw==;EndpointSuffix=core.windows.net"
+    "AzureDBConnectionString": "",
+    "AzureStorageConnectionString": "" //"DefaultEndpointsProtocol=https;AccountName=rrrestaurantstorage;AccountKey=MyB9yiJM0lLrG8HeyOi9RomyXAUSStowzJuuZ1GfQz1r9vRx3WkYJ6yyHkTpTC2P+NA3ljf/l8z4+ASt5wX9lw==;EndpointSuffix=core.windows.net"
   }
 }
