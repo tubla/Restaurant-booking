@@ -21,7 +21,7 @@ namespace RestaurantBookingApp.Function
             if (extension == ".xls" || extension == ".xlsx")
             {
 
-                //Process the excel file
+                //Process excel file
                 using (var package = new ExcelPackage(myBlob)) // package -> EPPlus
                 {
                     ExcelPackage.LicenseContext = LicenseContext.NonCommercial;
