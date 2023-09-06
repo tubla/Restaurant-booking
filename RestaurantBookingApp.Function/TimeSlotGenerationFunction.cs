@@ -27,7 +27,7 @@ namespace RestaurantBookingApp.Function
                 //string connectionString = config.GetConnectionString("AzureDBConnectionString");
 
                 // we can get the connection string from env variable once after configuring the connction string in azure function-app
-                string connectionString = Environment.GetEnvironmentVariable("SQLAZURECONNSTR_AzureDBConnectionString");
+                string connectionString = Environment.GetEnvironmentVariable("SQLCONNSTR_AzureDBConnectionString");
                 using (SqlConnection connection = new SqlConnection(connectionString))
                 {
                     await connection.OpenAsync();
